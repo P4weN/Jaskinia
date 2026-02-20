@@ -15,7 +15,7 @@
 
 <!-- MENU -->
 <div id="menu" class="screen">
-    <h1 class="W">Witaj w jaskini zaginionych prezentów!</h1>
+    <h1 class="W">Witaj w jaskini zaginionych!</h1>
     <p>Kliknij przycisk <b>start</b> by zacząć szukać!</p>
     <button onclick="pokazInstrukcje()">START</button>
 </div>
@@ -160,7 +160,7 @@ function spawnPacket(){
         document.getElementById("progress").style.width = progress+"%";
         document.getElementById("percentText").innerText = progress+"%";
 
-        lifetime -= 10;
+        lifetime -= 30;
 
         spawnPacket();
     };
@@ -224,3 +224,4 @@ function kopiujKod(){
 
 </body>
 </html>
+
