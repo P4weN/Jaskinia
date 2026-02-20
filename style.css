@@ -7,51 +7,48 @@ body {
     text-align:center;
 }
 
-/* ===== RAMKA PIXELART ===== */
-.screen, #graArea {
+/* ===== EKRANY ===== */
+.screen {
     position: fixed;
     width: 100%;
     height: 100dvh;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 
+    background-image: url('3.png');
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
-}
 
-/* MENU i INSTRUKCJA */
-.screen {
-    background-image: url('3.png');
-    flex-direction: column;
     padding: 20px;
+    z-index: 10;
 }
 
-/* GRA – RAMKA */
+/* ===== GRA ===== */
 #graArea {
+    position: fixed;
+    width: 100%;
+    height: 100dvh;
+
     background-image: url('Cave.png');
-}
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
 
-/* ===== WŁAŚCIWY OBSZAR GRY ===== */
-#innerArea {
-    position: relative;
-    width: 80%;      /* obszar gry wewnątrz ramki */
-    height: 70%;
-    max-width: 900px;
-    max-height: 600px;
-
-    /* granice gry */
-    border: 0px solid red; /* możesz włączyć na testy */
+    display:none;
+    z-index: 1;
 }
 
 /* ===== UI ===== */
 #ui {
-    position: absolute;
-    top: -60px; /* nad obszarem gry */
+    position: fixed;
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 20;
 }
 
 .uiText {
@@ -80,9 +77,10 @@ body {
 
 /* ===== OGNIEŃ ===== */
 .packet {
-    position: absolute;
+    position: fixed;
     font-size: clamp(40px, 12vw, 70px);
     cursor: pointer;
+    z-index: 5;
 }
 
 /* ===== ODLICZANIE ===== */
@@ -90,11 +88,14 @@ body {
     position: fixed;
     width:100%;
     height:100dvh;
+
     display:none;
     justify-content:center;
     align-items:center;
+
     font-size: clamp(60px, 20vw, 150px);
     background: black;
+    z-index: 30;
 }
 
 /* ===== PREZENT ===== */
