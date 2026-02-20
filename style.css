@@ -7,26 +7,38 @@ body {
     text-align:center;
 }
 
-/* ===== MENU I INSTRUKCJA ===== */
+/* ===== EKRANY ===== */
 .screen {
     position: fixed;
     width: 100%;
-    height: 100%;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     background-image: url('3.png');
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
+    padding: 20px;
+}
+
+/* ===== TEKSTY ===== */
+.W {
+    font-size: clamp(28px, 6vw, 60px);
+}
+
+p {
+    font-size: clamp(16px, 4vw, 28px);
 }
 
 /* ===== PRZYCISKI ===== */
 button {
-    padding: 15px 30px;
-    border-radius: 30px;
-    font-size: clamp(18px,4vw,35px);
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: clamp(20px, 5vw, 35px);
     margin-top: 20px;
     background: black;
     border: 2px solid #ff0000;
@@ -35,55 +47,48 @@ button {
     cursor: pointer;
 }
 
+/* ===== INPUT ===== */
 #hasloInput {
     background-color: transparent;
     border: 2px solid #e42a00;
-    font-size: clamp(16px,3vw,20px);
+    font-size: clamp(18px, 4vw, 26px);
     font-family: 'Pixelify Sans', monospace;
-    padding: 15px;
+    padding: 12px;
     margin-top: 15px;
     color: #e46300;
+    width: clamp(200px, 60vw, 400px);
 }
 
-/* ===== GRA AREA ===== */
+/* ===== GRA ===== */
 #graArea {
     display:none;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: black;
-}
+    position:relative;
+    width:100%;
+    height:100dvh;
 
-#graFrame {
-    position: relative;
-    width: 90%;
-    max-width: 600px;           /* szerokość Twojego obrazka */
-    aspect-ratio: 16 / 9;        /* proporcje Twojego obrazka */
     background-image: url('Cave.png');
-    background-size: contain;
-    background-repeat: no-repeat;
+    background-size: cover;
     background-position: center;
-    border: 4px solid #e46300;  /* ramka */
-    box-sizing: border-box;
-    overflow: hidden;
+    background-repeat: no-repeat;
 }
 
 /* ===== UI ===== */
 #ui {
     position: absolute;
-    top: 5%;
+    top: clamp(20px, 8vh, 80px);
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
+}
+
+.uiText {
+    font-size: clamp(18px, 4vw, 30px);
 }
 
 #progressBar {
-    width: 80%;
-    height: 4%;
+    width: clamp(200px, 60vw, 420px);
+    height: 22px;
     border: 2px solid #e46300;
-    margin: 1% auto;
+    margin-top: 12px;
     overflow: hidden;
 }
 
@@ -95,13 +100,14 @@ button {
 }
 
 #percentText {
-    margin-top: 0.5%;
+    margin-top: 8px;
+    font-size: clamp(18px, 4vw, 30px);
 }
 
-/* ===== PAKIET 🔥 ===== */
+/* ===== IKONA OGNIA ===== */
 .packet {
     position: absolute;
-    font-size: clamp(40px,10vw,60px);
+    font-size: clamp(40px, 12vw, 70px);
     cursor: pointer;
 }
 
@@ -109,19 +115,19 @@ button {
 #countdown {
     position: fixed;
     width:100%;
-    height:100%;
+    height:100dvh;
     display:none;
     justify-content:center;
     align-items:center;
-    font-size: 12vw;
+    font-size: clamp(60px, 20vw, 150px);
     background: black;
 }
 
-/* ===== NAGŁÓWKI ===== */
-h1 { margin:0 0 10px 0; }
-h2 { margin:0; }
-.W { font-size: clamp(20px,6vw,36px); }
-p { margin:0; }
+/* ===== PREZENT ===== */
+.gift {
+    font-size: clamp(80px, 25vw, 150px);
+    cursor:pointer;
+}
 
 /* ===== TRZĘSIENIE ===== */
 @keyframes shake {
