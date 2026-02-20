@@ -2,6 +2,8 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Stara Jaskinia</title>
 <link rel="shortcut icon" href="ziomek.png">
 <link rel="stylesheet" href="style.css">   
@@ -21,8 +23,9 @@
 <!-- INSTRUKCJA -->
 <div id="instrukcja" class="screen" style="display:none;">
     <h1 class="W">Instrukcja</h1>
-    <p>Twoim zadaniem jest odszyfrowanie zaginionego hasła.<br>Każde zdobyte 🔥 to +10% w postępie.</p>
-    <p>Gra robi się szybsza w miarę postępu. Powodzenia!</p>
+    <p>Twoim zadaniem jest odszyfrowanie zaginionego hasła.<br>Odszyfrowanie hasła polega na klikaniu w pojawiające się 🔥.<br>Każde zdobyte 🔥 to +10% w postępie.</p>
+    <h2><b>UWAGA!</b></h2>
+    <p>Gra wraz z postępem robi się szybsza. Powodzenia!</p>
     <button onclick="rozpocznijOdliczanie()">OK</button>
 </div>
 
@@ -31,21 +34,19 @@
 
 <!-- KONTENER GRY -->
 <div id="graArea">
-    <div id="graFrame">
-        <div id="ui">
-            <div>Odszyfrowywanie hasła...</div>
-            <div id="progressBar">
-                <div id="progress"></div>
-            </div>
-            <div id="percentText">0%</div>
+    <div id="ui">
+        <div class="uiText">Odszyfrowywanie hasła...</div>
+        <div id="progressBar">
+            <div id="progress"></div>
         </div>
+        <div id="percentText">0%</div>
     </div>
 </div>
 
 <!-- EKRAN BRAWO -->
 <div id="brawo" class="screen" style="display:none;">
     <h1 class="W">BRAWO!</h1>
-    <p>Udało ci się odszyfrować hasło.<br><b>Hasło:</b> Mój brat Paweł to sigma</p>
+    <p>Udało ci się odszyfrować hasło.<br><b>Hasło : </b>Mój brat Paweł to sigma</p>
     <h2><b>Wpisz hasło poniżej:</b></h2>
     <input type="text" id="hasloInput">
     <button onclick="sprawdzHaslo()">GOTOWY?</button>
@@ -53,11 +54,10 @@
 
 <!-- EKRAN PREZENT -->
 <div id="prezentScreen" class="screen" style="display:none;">
-    <div id="giftBox" style="font-size:120px; cursor:pointer;" onclick="otworzPrezent()">
-        🎁
-    </div>
+    <div id="giftBox" class="gift" onclick="otworzPrezent()">🎁</div>
+
     <div id="steamKeyBox" style="display:none; margin-top:20px;">
-        <h2>🎉A więc wszystkiego najlepszego!🎉</h2>
+        <h2>🎉A więc wszystkiego najlepszego staruchu!🎉</h2>
         <h2>Twój Steam Key(40zł):</h2>
         <hr class="hr">
         <h1 id="steamKey">ABCD1-EFGH2-IJKL3</h1>
@@ -66,10 +66,13 @@
     </div>
 </div>
 
+<audio id="clickSound" src="jump.wav"></audio>
+
 <script>
+
 /* ===== ZMIENNE ===== */
 let progress = 0;
-let lifetime = 1000; // czas życia ikony w ms
+let lifetime = 1000;
 let activePacket = null;
 
 /* ===== MENU I INSTRUKCJA ===== */
@@ -83,7 +86,7 @@ function rozpocznijOdliczanie(){
     countdown();
 }
 
-/* ===== ODLICZANIE 3 2 1 ===== */
+/* ===== ODLICZANIE ===== */
 function countdown(){
     const cd = document.getElementById("countdown");
     cd.style.display="flex";
@@ -104,18 +107,18 @@ function countdown(){
 
 /* ===== START GRY ===== */
 function startGry(){
-    document.getElementById("graArea").style.display="flex";
+    document.getElementById("graArea").style.display="block";
     spawnPacket();
 }
 
-/* ===== SPAWN 🔥 ===== */
+/* ===== SPAWN ===== */
 function spawnPacket(){
+
     if(progress>=100){
         koniecGry();
         return;
     }
 
-    // usuń poprzednie
     if(activePacket){
         activePacket.remove();
         activePacket = null;
@@ -125,18 +128,22 @@ function spawnPacket(){
     packet.className="packet";
     packet.innerText="🔥";
 
-    const frame = document.getElementById("graFrame");
-    const x = Math.random() * (frame.offsetWidth - 80);
-    const y = Math.random() * (frame.offsetHeight - 80);
+    const gameArea = document.getElementById("graArea");
+
+    const areaWidth = gameArea.clientWidth;
+    const areaHeight = gameArea.clientHeight;
+
+    const x = Math.random() * (areaWidth - 80);
+    const y = Math.random() * (areaHeight - 150);
 
     packet.style.left = x + "px";
     packet.style.top = y + "px";
 
-    frame.appendChild(packet);
+    gameArea.appendChild(packet);
     activePacket = packet;
 
     const timeout = setTimeout(function(){
-        spawnPacket(); 
+        spawnPacket();
     }, lifetime);
 
     packet.onclick = function(){
@@ -159,35 +166,51 @@ function spawnPacket(){
     };
 }
 
+/* ===== KONIEC GRY ===== */
 function koniecGry(){
-    const frame = document.getElementById("graFrame");
-    frame.classList.add("shake");
+
+    const gra = document.getElementById("graArea");
+
+    gra.classList.add("shake");
 
     setTimeout(function(){
-        frame.classList.remove("shake");
-        document.getElementById("graArea").style.display = "none";
+
+        gra.classList.remove("shake");
+        gra.style.display = "none";
+
         document.getElementById("brawo").style.display = "flex";
+
     }, 2000);
 }
 
+/* ===== HASŁO ===== */
 function sprawdzHaslo(){
+
     const wpisane = document.getElementById("hasloInput").value.trim();
+
     if(wpisane === "Mój brat Paweł to sigma"){
+
         document.getElementById("brawo").style.display = "none";
         document.getElementById("prezentScreen").style.display = "flex";
+
     } else {
         alert("Źle wpisane hasło 😅");
     }
 }
 
+/* ===== PREZENT ===== */
 function otworzPrezent(){
+
     const gift = document.getElementById("giftBox");
+
     gift.style.transition = "transform 0.6s";
     gift.style.transform = "rotate(720deg) scale(1.5)";
 
     setTimeout(function(){
+
         gift.style.display = "none";
         document.getElementById("steamKeyBox").style.display = "block";
+
     }, 700);
 }
 
@@ -196,7 +219,8 @@ function kopiujKod(){
     navigator.clipboard.writeText(kod);
     alert("Skopiowano kod! 🎉");
 }
+
 </script>
-<audio id="clickSound" src="jump.wav"></audio>
+
 </body>
 </html>
