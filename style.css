@@ -109,7 +109,7 @@ button {
 
 h1 { margin:0 0 10px 0; }
 h2 { margin:0; }
-.W { font-size:250%; }
+.W { font-size: clamp(20px, 6vw, 36px); }
 p { margin:0; }
 
 /* ===== TRZĘSIENIE ===== */
@@ -129,3 +129,4 @@ p { margin:0; }
 .hr {
     border: 1px solid #e46300;
 }
+
