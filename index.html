@@ -5,7 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Stara Jaskinia</title>
-<link rel="stylesheet" href="style.css">
+<link rel="shortcut icon" href="ziomek.png">
+<link rel="stylesheet" href="style.css">   
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -29,7 +32,7 @@
 <!-- ODLICZANIE -->
 <div id="countdown">3</div>
 
-<!-- GRA -->
+<!-- KONTENER GRY -->
 <div id="graArea">
     <div id="ui">
         <div class="uiText">Odszyfrowywanie hasła...</div>
@@ -40,7 +43,7 @@
     </div>
 </div>
 
-<!-- BRAWO -->
+<!-- EKRAN BRAWO -->
 <div id="brawo" class="screen" style="display:none;">
     <h1 class="W">BRAWO!</h1>
     <p>Udało ci się odszyfrować hasło.<br><b>Hasło : </b>Mój brat Paweł to sigma</p>
@@ -49,7 +52,7 @@
     <button onclick="sprawdzHaslo()">GOTOWY?</button>
 </div>
 
-<!-- PREZENT -->
+<!-- EKRAN PREZENT -->
 <div id="prezentScreen" class="screen" style="display:none;">
     <div id="giftBox" class="gift" onclick="otworzPrezent()">🎁</div>
 
@@ -72,25 +75,25 @@ let progress = 0;
 let lifetime = 1000;
 let activePacket = null;
 
-/* ===== MENU ===== */
+/* ===== MENU I INSTRUKCJA ===== */
 function pokazInstrukcje(){
-    menu.style.display = "none";
-    instrukcja.style.display = "flex";
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("instrukcja").style.display = "flex";
 }
 
 function rozpocznijOdliczanie(){
-    instrukcja.style.display = "none";
+    document.getElementById("instrukcja").style.display = "none";
     countdown();
 }
 
 /* ===== ODLICZANIE ===== */
 function countdown(){
-    const cd = countdownDiv;
+    const cd = document.getElementById("countdown");
     cd.style.display="flex";
     let liczba = 3;
     cd.innerText = liczba;
 
-    let interval = setInterval(()=>{
+    let interval = setInterval(function(){
         liczba--;
         cd.innerText = liczba;
 
@@ -104,14 +107,14 @@ function countdown(){
 
 /* ===== START GRY ===== */
 function startGry(){
-    graArea.style.display="block";
+    document.getElementById("graArea").style.display="block";
     spawnPacket();
 }
 
-/* ===== OGIEŃ NA CAŁYM EKRANIE ===== */
+/* ===== SPAWN ===== */
 function spawnPacket(){
 
-    if(progress >= 100){
+    if(progress>=100){
         koniecGry();
         return;
     }
@@ -122,35 +125,40 @@ function spawnPacket(){
     }
 
     const packet = document.createElement("div");
-    packet.className = "packet";
-    packet.innerText = "🔥";
+    packet.className="packet";
+    packet.innerText="🔥";
 
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
+    const gameArea = document.getElementById("graArea");
 
-    const x = Math.random() * (screenWidth - 80);
-    const y = Math.random() * (screenHeight - 80);
+    const areaWidth = gameArea.clientWidth;
+    const areaHeight = gameArea.clientHeight;
+
+    const x = Math.random() * (areaWidth - 80);
+    const y = Math.random() * (areaHeight - 150);
 
     packet.style.left = x + "px";
     packet.style.top = y + "px";
 
-    document.body.appendChild(packet);
+    gameArea.appendChild(packet);
     activePacket = packet;
 
-    const timeout = setTimeout(spawnPacket, lifetime);
+    const timeout = setTimeout(function(){
+        spawnPacket();
+    }, lifetime);
 
-    packet.onclick = () => {
-        clickSound.currentTime = 0;
-        clickSound.play();
+    packet.onclick = function(){
+        const sound = document.getElementById("clickSound");
+        sound.currentTime = 0;
+        sound.play();
 
         clearTimeout(timeout);
         packet.remove();
 
         progress += 10;
-        if(progress > 100) progress = 100;
+        if(progress>100) progress=100;
 
-        progressDiv.style.width = progress + "%";
-        percentText.innerText = progress + "%";
+        document.getElementById("progress").style.width = progress+"%";
+        document.getElementById("percentText").innerText = progress+"%";
 
         lifetime -= 10;
 
@@ -160,20 +168,31 @@ function spawnPacket(){
 
 /* ===== KONIEC GRY ===== */
 function koniecGry(){
-    graArea.classList.add("shake");
 
-    setTimeout(()=>{
-        graArea.classList.remove("shake");
-        graArea.style.display = "none";
-        brawo.style.display = "flex";
-    },2000);
+    const gra = document.getElementById("graArea");
+
+    gra.classList.add("shake");
+
+    setTimeout(function(){
+
+        gra.classList.remove("shake");
+        gra.style.display = "none";
+
+        document.getElementById("brawo").style.display = "flex";
+
+    }, 2000);
 }
 
 /* ===== HASŁO ===== */
 function sprawdzHaslo(){
-    if(hasloInput.value.trim() === "Mój brat Paweł to sigma"){
-        brawo.style.display = "none";
-        prezentScreen.style.display = "flex";
+
+    const wpisane = document.getElementById("hasloInput").value.trim();
+
+    if(wpisane === "Mój brat Paweł to sigma"){
+
+        document.getElementById("brawo").style.display = "none";
+        document.getElementById("prezentScreen").style.display = "flex";
+
     } else {
         alert("Źle wpisane hasło 😅");
     }
@@ -181,34 +200,25 @@ function sprawdzHaslo(){
 
 /* ===== PREZENT ===== */
 function otworzPrezent(){
-    giftBox.style.transition = "transform 0.6s";
-    giftBox.style.transform = "rotate(720deg) scale(1.5)";
 
-    setTimeout(()=>{
-        giftBox.style.display = "none";
-        steamKeyBox.style.display = "block";
-    },700);
+    const gift = document.getElementById("giftBox");
+
+    gift.style.transition = "transform 0.6s";
+    gift.style.transform = "rotate(720deg) scale(1.5)";
+
+    setTimeout(function(){
+
+        gift.style.display = "none";
+        document.getElementById("steamKeyBox").style.display = "block";
+
+    }, 700);
 }
 
 function kopiujKod(){
-    navigator.clipboard.writeText(steamKey.innerText);
+    const kod = document.getElementById("steamKey").innerText;
+    navigator.clipboard.writeText(kod);
     alert("Skopiowano kod! 🎉");
 }
-
-/* ===== SKRÓTY ===== */
-const menu = document.getElementById("menu");
-const instrukcja = document.getElementById("instrukcja");
-const countdownDiv = document.getElementById("countdown");
-const graArea = document.getElementById("graArea");
-const progressDiv = document.getElementById("progress");
-const percentText = document.getElementById("percentText");
-const brawo = document.getElementById("brawo");
-const hasloInput = document.getElementById("hasloInput");
-const prezentScreen = document.getElementById("prezentScreen");
-const giftBox = document.getElementById("giftBox");
-const steamKeyBox = document.getElementById("steamKeyBox");
-const steamKey = document.getElementById("steamKey");
-const clickSound = document.getElementById("clickSound");
 
 </script>
 
